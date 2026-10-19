@@ -123,3 +123,11 @@ The root cause: get_playlist_songs() used songs[:-1] when converting the query r
 The fix: I changed the return statement to convert songs directly with [song.to_dict() for song in songs]. This keeps the ascending playlist order and includes every song.
 
 Side-effect check: I checked that the playlist still follows the position order, that the first and middle songs remain present, and that the final song is now included.
+
+Regression test
+
+The regression test is test_playlist_includes_final_song in tests/test_playlists.py. It creates a playlist with five songs, calls get_playlist_songs(), and checks that the final result is Track 5. Before the fix, songs[:-1] removed that song and the test failed. I ran it with:
+
+/Users/ericao/Repos/.venv/bin/pytest tests/test_playlists.py
+
+The playlist test file passed all four tests.
