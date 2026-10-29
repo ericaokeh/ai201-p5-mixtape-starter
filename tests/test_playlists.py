@@ -71,6 +71,15 @@ def test_playlist_returns_songs_in_order(app, seed_playlist):
         assert titles == ["Track 1", "Track 2", "Track 3", "Track 4", "Track 5"]
 
 
+def test_playlist_includes_final_song(app, seed_playlist):
+    """The final song in the playlist should not be dropped from the response."""
+    with app.app_context():
+        playlist_id = seed_playlist["playlist"].id
+        songs = get_playlist_songs(playlist_id)
+
+        assert songs[-1]["title"] == "Track 5"
+
+
 def test_empty_playlist_returns_empty_list(app):
     """An empty playlist should return an empty list without error."""
     with app.app_context():

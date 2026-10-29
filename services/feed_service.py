@@ -29,7 +29,9 @@ def get_friends_listening_now(user_id: str) -> list[dict]:
     if not user:
         raise ValueError(f"User {user_id} not found")
 
-    cutoff = datetime.now(timezone.utc) - RECENT_THRESHOLD
+    now = datetime.now(timezone.utc)
+    cutoff = datetime.combine(now.date(), datetime.min.time(), tzinfo=timezone.utc)
+
     friend_ids = [f.id for f in user.friends]
 
     if not friend_ids:
@@ -60,6 +62,7 @@ def get_friends_listening_now(user_id: str) -> list[dict]:
             })
 
     return result
+
 
 
 def get_activity_feed(user_id: str, limit: int = 20) -> list[dict]:
